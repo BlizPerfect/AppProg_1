@@ -8,23 +8,21 @@ namespace AppProg_1
     {
         static void Main(string[] args)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             Console.WriteLine("Введите число:");
             bool test = true;
-            int number = 0;
             string numberString = "";
             while (test)
             {
                 try
                 {
                     numberString = Console.ReadLine();
-                    number = Convert.ToInt32(numberString);
+                    int number = Convert.ToInt32(numberString);
                     test = false;
                 }
                 catch
                 {
                     Console.WriteLine("Неверный ввод, попробуйте сного ввести число!");
-                    number = 0;
                 }
             }
             Dictionary<char, string> converterFirstRank = new Dictionary<char, string>
@@ -100,32 +98,46 @@ namespace AppProg_1
                 {
                     if (numberString.Length > 1 && numberString[i - 2].Equals('1'))
                     {
-                        sb.Insert(0, converterFirstRankExtra[numberString[i - 1]] + " ");
+                        builder.Insert(0, converterFirstRankExtra[numberString[i - 1]] + " ");
                         i--;
                     }
                     else if (numberString.Equals("0"))
                     {
-                        sb.Insert(0, "Ноль");
+                        builder.Insert(0, "Ноль");
                     }
                     else
                     {
-                        sb.Insert(0, converterFirstRank[numberString[i - 1]] + " ");
+                        builder.Insert(0, converterFirstRank[numberString[i - 1]] + " ");
                     }
                 }
                 else if (i == (numberString.Length - 1))
                 {
-                    sb.Insert(0, converterSecondRank[numberString[i - 1]] + " ");
+                    builder.Insert(0, converterSecondRank[numberString[i - 1]] + " ");
                 }
                 else if (i == (numberString.Length - 2))
                 {
-                    sb.Insert(0, converterThirdRank[numberString[i - 1]] + " ");
+                    builder.Insert(0, converterThirdRank[numberString[i - 1]] + " ");
                 }
                 else if (i == (numberString.Length - 3))
                 {
-                    sb.Insert(0, converterFourthRank[numberString[i - 1]] + " ");
+                    builder.Insert(0, converterFourthRank[numberString[i - 1]] + " ");
                 }
             }
-            Console.WriteLine(sb.ToString());
+
+            if (numberString[numberString.Length - 1].Equals('1') && numberString.Length < 2)
+            {
+                builder.Append("рубль");
+            }
+            else if (!numberString[numberString.Length - 2].Equals('1') && (numberString[numberString.Length - 1].Equals('2') || numberString[numberString.Length - 1].Equals('3') || numberString[numberString.Length - 1].Equals('4')))
+            {
+                builder.Append("рубля");
+            }
+            else
+            {
+                builder.Append("рублей");
+            }
+
+            Console.WriteLine(builder.ToString());
         }
     }
 }
