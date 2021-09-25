@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace AppProg_1
 {
@@ -9,96 +9,57 @@ namespace AppProg_1
         static void Main(string[] args)
         {
             StringBuilder builder = new StringBuilder();
-            Console.WriteLine("Введите число:");
+            var numberString = InputeString();
+            var resultInt = Convert.ToInt32(numberString);
+            builder = ConvertFromDigitsToChars(numberString, builder);
+            builder = AddRubles(resultInt, builder);
+            var resultString = builder.ToString();
+            resultString = Regex.Replace(resultString, "[ ]+", " ");
+            resultString = char.ToUpper(resultString[0]) + resultString.Substring(1);
+            Console.WriteLine("\nВы ввели: " + resultString);
+        }
+
+        public static string InputeString()
+        {
+            Console.WriteLine("Введите число, состоящее из максимум 4-ёх разрядов:");
             bool test = true;
-            string numberString = "";
+            string result = "";
             while (test)
             {
                 try
                 {
-                    numberString = Console.ReadLine();
-                    int number = Convert.ToInt32(numberString);
-                    test = false;
+                    result = Console.ReadLine();
+                    if (result.Length > 4)
+                    {
+                        Console.WriteLine("Вы превысили допустимую разрядность!\nПопробуйте попробуйте сного ввести число!");
+                    }
+                    else if (result.StartsWith("0"))
+                    {
+                        Console.WriteLine("Неверный ввод, попробуйте сного ввести число!");
+                    }
+                    else
+                    {
+                        int number = Convert.ToInt32(result);
+                        test = false;
+                    }
                 }
                 catch
                 {
                     Console.WriteLine("Неверный ввод, попробуйте сного ввести число!");
                 }
             }
-            Dictionary<char, string> converterFirstRank = new Dictionary<char, string>
-            {
-                { '0', "" },
-                { '1', "один" },
-                { '2', "два" },
-                { '3', "три" },
-                { '4', "четыре" },
-                { '5', "пять" },
-                { '6', "шесть" },
-                { '7', "семь" },
-                { '8', "восемь" },
-                { '9', "девять" }
-            };
-            Dictionary<char, string> converterFirstRankExtra = new Dictionary<char, string>
-            {
-                { '0',"десять" },
-                { '1', "одиннадцать" },
-                { '2', "двенадцать" },
-                { '3', "тринадцать" },
-                { '4', "четырнадцать" },
-                { '5', "пятнадцать" },
-                { '6', "шестнадцать" },
-                { '7', "семнадцать" },
-                { '8', "восемнадцать" },
-                { '9', "девятнадцать" },
-            };
-            Dictionary<char, string> converterSecondRank = new Dictionary<char, string>
-            {
-                { '0', "" },
-                { '1', "десять" },
-                { '2', "двадцать" },
-                { '3', "тридцать" },
-                { '4', "сорок" },
-                { '5', "пятьдесят" },
-                { '6', "шестьдесят" },
-                { '7', "семьдесят" },
-                { '8', "восемьдесят" },
-                { '9', "девяносто" },
-            };
-            Dictionary<char, string> converterThirdRank = new Dictionary<char, string>
-            {
-                { '0', "" },
-                { '1', "сто" },
-                { '2', "двести" },
-                { '3', "триста" },
-                { '4', "четыреста" },
-                { '5', "пятьсот" },
-                { '6', "шестьсот" },
-                { '7', "семьсот" },
-                { '8', "восемьсот" },
-                { '9', "девятьсот" },
-            };
-            Dictionary<char, string> converterFourthRank = new Dictionary<char, string>
-            {
-                { '1', "одна тысяча" },
-                { '2', "две тысячи" },
-                { '3', "три тысячи" },
-                { '4', "четыре тысячи" },
-                { '5', "пять тысяч" },
-                { '6', "шесть тысяч" },
-                { '7', "семь тысяч" },
-                { '8', "восемь тысяч" },
-                { '9', "девять тысяч" },
-            };
-            //% - остаток от деления
-            // / - челочисленное деление
+            return result;
+        }
+
+        public static StringBuilder ConvertFromDigitsToChars(string numberString, StringBuilder builder)
+        {
             for (var i = numberString.Length; i > 0; i--)
             {
-                //Console.WriteLine("Текущее число: " + numberString[i - 1] + " : Текущая позиция: " + i);
                 if ((i == (numberString.Length)))
                 {
                     if (numberString.Length > 1 && numberString[i - 2].Equals('1'))
                     {
-                        builder.Insert(0, converterFirstRankExtra[numberString[i - 1]] + " ");
+                        builder.Insert(0, Dictionaries.ConverterFirstRankExtra[numberString[i - 1]]);
                         i--;
                     }
                     else if (numberString.Equals("0"))
@@ -107,37 +68,36 @@ namespace AppProg_1
                     }
                     else
                     {
-                        builder.Insert(0, converterFirstRank[numberString[i - 1]] + " ");
+                        builder.Insert(0, Dictionaries.ConverterFirstRank[numberString[i - 1]]);
                     }
                 }
                 else if (i == (numberString.Length - 1))
                 {
-                    builder.Insert(0, converterSecondRank[numberString[i - 1]] + " ");
+                    builder.Insert(0, Dictionaries.ConverterSecondRank[numberString[i - 1]] + " ");
                 }
                 else if (i == (numberString.Length - 2))
                 {
-                    builder.Insert(0, converterThirdRank[numberString[i - 1]] + " ");
+                    builder.Insert(0, Dictionaries.ConverterThirdRank[numberString[i - 1]] + " ");
                 }
                 else if (i == (numberString.Length - 3))
                 {
-                    builder.Insert(0, converterFourthRank[numberString[i - 1]] + " ");
+                    builder.Insert(0, Dictionaries.ConverterFourthRank[numberString[i - 1]] + " ");
                 }
             }
+            return builder;
+        }
 
-            if (numberString[numberString.Length - 1].Equals('1') && numberString.Length < 2)
+        public static StringBuilder AddRubles(int resultInt, StringBuilder builder)
+        {
+            if ((resultInt % 10 == 1) && (resultInt % 100 != 11))
             {
-                builder.Append("рубль");
+                return builder.Append(" рубль");
             }
-            else if (!numberString[numberString.Length - 2].Equals('1') && (numberString[numberString.Length - 1].Equals('2') || numberString[numberString.Length - 1].Equals('3') || numberString[numberString.Length - 1].Equals('4')))
+            if ((resultInt % 10 >= 2) && (resultInt % 10 <= 4) && (resultInt % 100 < 10 || resultInt % 100 >= 20))
             {
-                builder.Append("рубля");
+                return builder.Append(" рубля");
             }
-            else
-            {
-                builder.Append("рублей");
-            }
-
-            Console.WriteLine(builder.ToString());
+            return builder.Append(" рублей");
         }
     }
 }
