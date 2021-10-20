@@ -19,9 +19,13 @@ namespace AppProg_1
             Console.WriteLine("\nВы ввели: " + resultString);
         }
 
+        /// <summary>
+        /// Ввод строки.
+        /// </summary>
+        /// <returns>string</returns>
         public static string InputeString()
         {
-            Console.WriteLine("Введите число, состоящее из максимум 4-ёх разрядов:");
+            Console.WriteLine("Введите число, состоящее из максимум 4-ёх разрядов в диапозоне от 1 до 9999:");
             bool test = true;
             string result = "";
             while (test)
@@ -31,16 +35,23 @@ namespace AppProg_1
                     result = Console.ReadLine();
                     if (result.Length > 4)
                     {
-                        Console.WriteLine("Вы превысили допустимую разрядность!\nПопробуйте попробуйте сного ввести число!");
+                        Console.WriteLine("Вы превысили допустимую разрядность!\nПопробуйте сного ввести число!");
                     }
-                    else if (result.StartsWith("0"))
+                    else if (result.StartsWith("0") && result.Length != 1)
                     {
                         Console.WriteLine("Неверный ввод, попробуйте сного ввести число!");
                     }
                     else
                     {
                         int number = Convert.ToInt32(result);
-                        test = false;
+                        if (number < 1 || number > 9999)
+                        {
+                            Console.WriteLine("Вы вышли за диапозон [1,9999], попробуйте сного ввести число!");
+                        }
+                        else
+                        {
+                            test = false;
+                        }
                     }
                 }
                 catch
@@ -51,6 +62,10 @@ namespace AppProg_1
             return result;
         }
 
+        /// <summary>
+        /// Конвертация числа из числового представления в строковое.
+        /// </summary>
+        /// <returns>StringBuilder</returns>
         public static StringBuilder ConvertFromDigitsToChars(string numberString, StringBuilder builder)
         {
             for (var i = numberString.Length; i > 0; i--)
@@ -87,6 +102,10 @@ namespace AppProg_1
             return builder;
         }
 
+        /// <summary>
+        /// Выдача верного подежа слова "Рубль" для соответсвующего числа.
+        /// </summary>
+        /// <returns>StringBuilder</returns>
         public static StringBuilder AddRubles(int resultInt, StringBuilder builder)
         {
             if ((resultInt % 10 == 1) && (resultInt % 100 != 11))
